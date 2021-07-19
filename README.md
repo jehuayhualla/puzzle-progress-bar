@@ -1,2 +1,2 @@
-# Puzzle Progress Bar
+# Puzzle Progress Bar (ReactJs)
 
