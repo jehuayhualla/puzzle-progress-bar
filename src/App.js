@@ -1,23 +1,46 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
-
+import ProgressBar from './components/bars/progress-bar';
+import CustomButton from './components/buttons/custom-button';
 function App() {
+  const [renderedProgress, setRenderedProgress] = React.useState(0);
+  const [paused, setPaused] = React.useState(true);
+  var interval = null;
+  const maxBoxes = 15
+
+  const handleInterval = () => {
+    if(paused) return
+    if(renderedProgress >= maxBoxes) return
+    const newValue = renderedProgress + 1
+    setRenderedProgress(newValue)
+  }
+
+  React.useEffect(()=>{
+    const id = setInterval(handleInterval,500);
+    interval = id;
+    return () => {
+      clearInterval(interval);
+    };
+  })
+
+  const onStart = () => {
+    setPaused(false)
+  }
+
+  const onStop = () => {
+    setPaused(true)
+  }
+
+  const onReset = () => {
+    setRenderedProgress(0)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ProgressBar boxlength={maxBoxes} boxesLoaded={renderedProgress} />
+      <CustomButton onClick={onStart} title="Start" />
+      <CustomButton onClick={onStop} title="Stop" />
+      <CustomButton onClick={onReset} title="Reset" />
     </div>
   );
 }
